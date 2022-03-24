@@ -7,16 +7,14 @@ class NumeroBinario{
 
 function algoritmoEvolutivo(expresion){
 
-    let iteraciones = 10;
+    let iteraciones = 1000;
 
     let poblacion = generarPoblacion();
 
     for(let i = 0; i < iteraciones; i++){
-        console.log(poblacion);
         let nuevosHijos = generarCruces(poblacion);
-        console.log(nuevosHijos);
-        //let hijosMutados = mutacion(nuevosHijos);
-        //poblacion = seleccion(poblacion,hijosMutados,expresion);
+        let hijosMutados = mutacion(nuevosHijos);
+        poblacion = seleccion(poblacion,hijosMutados,expresion);
     }
 }
 
@@ -56,14 +54,14 @@ function generarPoblacion(){
 function generarCruces(poblacion){
     let nuevosHijos = [];
 
+    let rand = Math.round(Math.random()*(poblacion.length));
+
     for(let i = 0; i < poblacion.length; i++){
         if(Math.round(Math.random())<0.7){
-            if(i == poblacion.length-2){
-                nuevosHijos.push(cruce(poblacion[i],poblacion[0]));
+            while(rand === i){
+                rand = Math.round(Math.random()*(poblacion.length-1));
             }
-            else{
-                nuevosHijos.push(cruce(poblacion[i],poblacion[i+1]));
-            }
+            nuevosHijos.push(cruce(poblacion[i],poblacion[rand]));
         }
     }
 
@@ -71,7 +69,7 @@ function generarCruces(poblacion){
 }
 
 function cruce(numPadre,numHijo){
-
+    
     let pEnteraPadre = numPadre.parteEntera;
     let pEnteraHijo = numHijo.parteEntera;
     let pDecimalPadre = numPadre.parteDecimal;
@@ -79,7 +77,6 @@ function cruce(numPadre,numHijo){
 
     let pEntera = pEnteraPadre.substring(0,pEnteraPadre.length/2) + pEnteraHijo.substring(pEnteraHijo.length/2,pEnteraHijo.length);
     let pDecimal = pDecimalPadre.substring(0,pDecimalPadre.length/2) + pDecimalHijo.substring(pDecimalHijo.length/2,pDecimalHijo.length);
-
     return new NumeroBinario(pEntera,pDecimal);
 }
 
@@ -120,7 +117,6 @@ function mutacion(numHijo){
 }
 
 function seleccion(poblacion,hijos,expresion){
-    console.log(hijos);
     let numPadre = 0;
     let evalPadre = "";
 
